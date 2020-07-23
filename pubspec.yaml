@@ -28,6 +28,7 @@ dependencies:
   http: ^0.12.2
   flushbar: ^1.10.4
   font_awesome_flutter: ^8.8.0
+  flutter_svg: ^0.17.4
 
 dev_dependencies:
   flutter_test:
@@ -54,6 +55,11 @@ flutter:
    - assets/images/wallet_dark_logo.png
    - assets/images/wallet_logo.png
    - assets/images/2020-01-19.png
+   - assets/eyebrows.jpg
+   - assets/eye.jpg
+   - assets/nose.jpg
+   - assets/lips.jpg
+   - assets/face.jpg
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
