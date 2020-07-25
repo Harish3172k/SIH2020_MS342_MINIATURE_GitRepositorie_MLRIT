@@ -1,4 +1,7 @@
+import 'dart:convert';
+import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 
 class MyHomePage extends StatefulWidget {
   @override
@@ -6,6 +9,28 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  List<String> righteye,lefteye,lefteyebrow,rightbrow,mouth,nose;
+  Map object;
+  void getData(http.Response res) {
+      object = json.decode(res.body);
+      print(object.keys);
+      righteye = object['righteye'];
+      rightbrow = object['righteyebrow'];
+      lefteyebrow = object['lefteyebrow'];
+      mouth = object['mouth'];
+      lefteye = object['lefteye'];
+      nose = object['nose'];
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    print('Initalising');
+    http.get('https://sih-api07.herokuapp.com/all')
+    .then((val)=>getData(val))
+    .catchError((err)=>print(err));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -33,7 +58,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         fontSize: 30.0)),
                 SizedBox(height: 20.0),
                 //Face Shape
-                Text('Face Shape',
+                Text('Nose Shape',
                     style: TextStyle(
                         fontFamily: 'Montserrat',
                         fontWeight: FontWeight.w600,
@@ -45,21 +70,13 @@ class _MyHomePageState extends State<MyHomePage> {
           SizedBox(height: 7.0),
           Container(
             height: 250.0,
-            child: ListView(
+            child: ListView.builder(
               scrollDirection: Axis.horizontal,
-              children: [
-                //this is where list items has to be added
-                _buildListItem(
-                  'assets/face.jpg',
-                ),
-                _buildListItem(
-                  'assets/face.jpg',
-                ),
-                _buildListItem(
-                  'assets/face.jpg',
-                ),
-              ],
-            ),
+              itemCount: nose.length,
+              itemBuilder: (context,i){
+                return _buildListItem(nose[i]);
+              },
+            )
           ),
           //Eyebrows
           SizedBox(height: 10.0),
@@ -69,7 +86,7 @@ class _MyHomePageState extends State<MyHomePage> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 SizedBox(height: 20.0),
-                Text('EyeBrows',
+                Text('Left EyeBrows',
                     style: TextStyle(
                         fontFamily: 'Montserrat',
                         fontWeight: FontWeight.w600,
@@ -81,20 +98,12 @@ class _MyHomePageState extends State<MyHomePage> {
           SizedBox(height: 7.0),
           Container(
             height: 250.0,
-            child: ListView(
-              scrollDirection: Axis.horizontal,
-              children: <Widget>[
-                //this is where list items has to be added
-                _buildListItem(
-                  'assets/eyebrows.jpg',
-                ),
-                _buildListItem(
-                  'assets/eyebrows.jpg',
-                ),
-                _buildListItem(
-                  'assets/eyebrows.jpg',
-                ),
-              ],
+            child: ListView.builder(
+              itemCount: lefteyebrow.length,
+              itemBuilder: (context,i){
+                return _buildListItem(lefteyebrow[i]);
+              }
+            
             ),
           ),
           //Eyes
@@ -105,7 +114,7 @@ class _MyHomePageState extends State<MyHomePage> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 SizedBox(height: 20.0),
-                Text('Eyes',
+                Text('Left Eyes',
                     style: TextStyle(
                         fontFamily: 'Montserrat',
                         fontWeight: FontWeight.w600,
@@ -117,20 +126,12 @@ class _MyHomePageState extends State<MyHomePage> {
           SizedBox(height: 7.0),
           Container(
             height: 250.0,
-            child: ListView(
-              scrollDirection: Axis.horizontal,
-              children: <Widget>[
-                //this is where list items has to be added
-                _buildListItem(
-                  'assets/eye.jpg',
-                ),
-                _buildListItem(
-                  'assets/eye.jpg',
-                ),
-                _buildListItem(
-                  'assets/eye.jpg',
-                ),
-              ],
+            child: ListView.builder(
+              itemCount: lefteye.length,
+              itemBuilder: (context,i){
+                return _buildListItem(lefteye[i]);
+              }
+            
             ),
           ),
           //Nose
@@ -141,7 +142,7 @@ class _MyHomePageState extends State<MyHomePage> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 SizedBox(height: 20.0),
-                Text('Nose',
+                Text('Right Eyebrow',
                     style: TextStyle(
                         fontFamily: 'Montserrat',
                         fontWeight: FontWeight.w600,
@@ -153,21 +154,12 @@ class _MyHomePageState extends State<MyHomePage> {
           SizedBox(height: 7.0),
           Container(
             height: 250.0,
-            child: ListView(
-              scrollDirection: Axis.horizontal,
-              children: <Widget>[
-                //this is where list items has to be added
-                //Image Path Inside ''
-                _buildListItem(
-                  'assets/nose.jpg',
-                ),
-                _buildListItem(
-                  'assets/nose.jpg',
-                ),
-                _buildListItem(
-                  'assets/nose.jpg',
-                )
-              ],
+            child: ListView.builder(
+              itemCount: rightbrow.length,
+              itemBuilder: (context,i){
+                return _buildListItem(rightbrow[i]);
+              }
+            
             ),
           ),
           //Lips
@@ -178,7 +170,7 @@ class _MyHomePageState extends State<MyHomePage> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 SizedBox(height: 20.0),
-                Text('Lips',
+                Text('Right eye',
                     style: TextStyle(
                         fontFamily: 'Montserrat',
                         fontWeight: FontWeight.w600,
@@ -190,20 +182,40 @@ class _MyHomePageState extends State<MyHomePage> {
           SizedBox(height: 7.0),
           Container(
             height: 250.0,
-            child: ListView(
-              scrollDirection: Axis.horizontal,
+            child: ListView.builder(
+              itemCount: righteye.length,
+              itemBuilder: (context,i){
+                return _buildListItem(righteye[i]);
+              }
+            
+            ),
+          ),
+          //Lips
+          SizedBox(height: 10.0),
+          Padding(
+            padding: EdgeInsets.only(left: 25.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                //this is where list items has to be added
-                _buildListItem(
-                  'assets/lips.jpg',
-                ),
-                _buildListItem(
-                  'assets/lips.jpg',
-                ),
-                _buildListItem(
-                  'assets/lips.jpg',
-                ),
+                SizedBox(height: 20.0),
+                Text('Mouth',
+                    style: TextStyle(
+                        fontFamily: 'Montserrat',
+                        fontWeight: FontWeight.w600,
+                        fontSize: 17.0))
               ],
+            ),
+          ),
+          //Lips
+          SizedBox(height: 7.0),
+          Container(
+            height: 250.0,
+            child: ListView.builder(
+              itemCount: mouth.length,
+              itemBuilder: (context,i){
+                return _buildListItem(mouth[i]);
+              }
+            
             ),
           ),
         ],
@@ -246,7 +258,7 @@ class _MyHomePageState extends State<MyHomePage> {
                           height: 200.0,
                           decoration: BoxDecoration(
                               image: DecorationImage(
-                                  image: AssetImage(imgPath),
+                                  image: MemoryImage(base64Decode(imgPath)),
                                   fit: BoxFit.contain),
                               borderRadius: BorderRadius.only(
                                   topLeft: Radius.circular(15.0),
