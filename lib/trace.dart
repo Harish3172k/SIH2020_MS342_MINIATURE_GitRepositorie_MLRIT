@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'dart:async';
+import 'package:progress_indicators/progress_indicators.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
@@ -9,8 +9,9 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  List<String> righteye,lefteye,lefteyebrow,rightbrow,mouth,nose;
+  List<dynamic> righteye,lefteye,lefteyebrow,rightbrow,mouth,nose;
   Map object;
+  bool isLoading = true;
   void getData(http.Response res) {
       object = json.decode(res.body);
       print(object.keys);
@@ -20,6 +21,9 @@ class _MyHomePageState extends State<MyHomePage> {
       mouth = object['mouth'];
       lefteye = object['lefteye'];
       nose = object['nose'];
+      setState(() {
+        isLoading = false;
+      });
   }
 
   @override
@@ -33,7 +37,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return isLoading?Scaffold(body:Center(child: JumpingDotsProgressIndicator(fontSize: 30,numberOfDots: 3,dotSpacing: 4,))):Scaffold(
       body: ListView(
         children: <Widget>[
           SizedBox(height: 20.0),
@@ -99,6 +103,7 @@ class _MyHomePageState extends State<MyHomePage> {
           Container(
             height: 250.0,
             child: ListView.builder(
+              scrollDirection: Axis.horizontal,
               itemCount: lefteyebrow.length,
               itemBuilder: (context,i){
                 return _buildListItem(lefteyebrow[i]);
@@ -127,6 +132,7 @@ class _MyHomePageState extends State<MyHomePage> {
           Container(
             height: 250.0,
             child: ListView.builder(
+              scrollDirection: Axis.horizontal,
               itemCount: lefteye.length,
               itemBuilder: (context,i){
                 return _buildListItem(lefteye[i]);
@@ -155,6 +161,7 @@ class _MyHomePageState extends State<MyHomePage> {
           Container(
             height: 250.0,
             child: ListView.builder(
+              scrollDirection: Axis.horizontal,
               itemCount: rightbrow.length,
               itemBuilder: (context,i){
                 return _buildListItem(rightbrow[i]);
@@ -183,6 +190,7 @@ class _MyHomePageState extends State<MyHomePage> {
           Container(
             height: 250.0,
             child: ListView.builder(
+              scrollDirection: Axis.horizontal,
               itemCount: righteye.length,
               itemBuilder: (context,i){
                 return _buildListItem(righteye[i]);
@@ -211,6 +219,7 @@ class _MyHomePageState extends State<MyHomePage> {
           Container(
             height: 250.0,
             child: ListView.builder(
+              scrollDirection: Axis.horizontal,
               itemCount: mouth.length,
               itemBuilder: (context,i){
                 return _buildListItem(mouth[i]);

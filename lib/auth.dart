@@ -1,20 +1,6 @@
+import 'package:e_spy/trace.dart';
 import 'package:flutter/material.dart';
 //import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-
-void main() {
-  runApp(MyApp());
-}
-
-class MyApp extends StatelessWidget {
-  // This widget is the root of your application.
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: loginPage(),
-    );
-  }
-}
 
 class loginPage extends StatefulWidget {
   @override
@@ -93,7 +79,7 @@ class _loginPageState extends State<loginPage> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         FlatButton(
-          onPressed: null,
+          onPressed:null,
           child: Text(
             'Forgot Password?',
             style: TextStyle(
@@ -170,7 +156,7 @@ class _loginPageState extends State<loginPage> {
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(30.0),
             ),
-            onPressed: () {},
+            onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (BuildContext context)=>MyHomePage())),
             child: Text(
               'Login',
               style: TextStyle(
