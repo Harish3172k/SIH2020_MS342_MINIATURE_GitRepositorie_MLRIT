@@ -1,4 +1,6 @@
 import 'dart:convert';
+import 'package:e_spy/auth.dart';
+import 'package:flushbar/flushbar.dart';
 import 'package:progress_indicators/progress_indicators.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -9,10 +11,18 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  List<dynamic> righteye,lefteye,lefteyebrow,rightbrow,mouth,nose;
+  List<dynamic> righteye,lefteye,lefteyebrow,rightbrow,mouth,nose,face;
   Map object;
+  Map<String,String> to_send;
   bool isLoading = true;
   void getData(http.Response res) {
+    if(res.statusCode != 200){
+        Flushbar(messageText: Text('Session expired',style: TextStyle(color:Colors.white),),duration: Duration(seconds:5),)..show(context);
+        Future.delayed(Duration(seconds: 5),(){
+            Navigator.pushReplacement(context, MaterialPageRoute(builder: (BuildContext context)=>loginPage()));
+        });
+        return;
+    }
       object = json.decode(res.body);
       print(object.keys);
       righteye = object['righteye'];
@@ -78,7 +88,14 @@ class _MyHomePageState extends State<MyHomePage> {
               scrollDirection: Axis.horizontal,
               itemCount: nose.length,
               itemBuilder: (context,i){
-                return _buildListItem(nose[i]);
+                return GestureDetector(
+                  child: Focus(
+                    autofocus: true,
+                    child:_buildListItem(nose[i])),
+                  onTap: () => {
+                    to_send['nose'] = nose[i]
+                  },
+                );
               },
             )
           ),

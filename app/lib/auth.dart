@@ -48,7 +48,7 @@ class _loginPageState extends State<loginPage> {
             Icons.email,
             color: mainColor,
           ),
-          labelText: "Email",
+          labelText: "Username",
         ),
       ),
     );
@@ -151,9 +151,11 @@ class _loginPageState extends State<loginPage> {
         if(res.statusCode == 200) {
           Navigator.pushReplacement(context, MaterialPageRoute(builder: (BuildContext context)=>MyHomePage()));
         }
+        else if(res.statusCode == 500){
+          Flushbar(messageText: Text('Invalid credentials or account doesnt exist',style: TextStyle(color: Colors.white)),duration: Duration(seconds: 5),)..show(context);
+        }
         else {
-          Flushbar(messageText: Text('Unable to authenticate'),duration: Duration(seconds: 5),);
-          print(res.body);
+          Flushbar(messageText: Text('Internal server error',style: TextStyle(color: Colors.white)),duration: Duration(seconds: 5),)..show(context);
         }
     }
 
@@ -174,7 +176,7 @@ class _loginPageState extends State<loginPage> {
                 http.post('https://sih-api07.herokuapp.com/login',headers: {'Content-Type':'application/json'},body: json.encode({'username':email,'password':password}))
                 .then((value) => authenticate(value))
                 .catchError((err)=>{
-                    Flushbar(messageText: Text('Unable to authenticate'),duration: Duration(seconds: 5),)
+                    Flushbar(messageText: Text('Unable to authenticate',style: TextStyle(color:Colors.white),),duration: Duration(seconds: 5),)..show(context)
                 })
             },
             child: Text(
@@ -200,7 +202,7 @@ class _loginPageState extends State<loginPage> {
         Padding(
           padding: EdgeInsets.only(top: 10),
           child: FlatButton(
-            onPressed: () => {Navigator.push(context, MaterialPageRoute(builder: (BuildContext context)=>_signup()))},
+            onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (BuildContext context)=>_signup())),
             child: RichText(
               text: TextSpan(
                 children: [
@@ -421,9 +423,15 @@ class _signupstate extends State<_signup>
     {
       Navigator.pushReplacement(context, MaterialPageRoute(builder: (BuildContext context)=>MyHomePage()));
     }
-    else {
-      print(res.body);
+    else if(res.statusCode == 500){
+      Flushbar(messageText: Text('User already exists',style: TextStyle(color: Colors.white)),duration: Duration(seconds: 5),)..show(context);
+      Future.delayed(Duration(seconds: 5),(){
+        Navigator.pushReplacement(context, MaterialPageRoute(builder: (BuildContext context)=>loginPage()));
+      });
     }
+    else {
+        Flushbar(messageText: Text('Internal server error',style: TextStyle(color: Colors.white)),duration: Duration(seconds: 5),)..show(context);
+      }
   }
 
   Widget _buildLoginButton() {
