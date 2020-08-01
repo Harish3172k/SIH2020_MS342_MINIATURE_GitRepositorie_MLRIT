@@ -98,7 +98,6 @@ class _MyHomePageState extends State<MyHomePage> {
                   child: _buildListItem(nose[i]),
                   onTapDown : (_)=>{
                     addToMap(nose[i],'nose'),
-                    print(toSend)
                   },
                 );
               },
@@ -128,7 +127,12 @@ class _MyHomePageState extends State<MyHomePage> {
               scrollDirection: Axis.horizontal,
               itemCount: lefteyebrow.length,
               itemBuilder: (context,i){
-                return _buildListItem(lefteyebrow[i]);
+                return GestureDetector(
+                  onTapDown: (_)=>{
+                    addToMap(lefteyebrow[i],'lefteyebrow')
+                  },
+                  child: _buildListItem(lefteyebrow[i])
+                  );
               }
             
             ),
@@ -157,7 +161,12 @@ class _MyHomePageState extends State<MyHomePage> {
               scrollDirection: Axis.horizontal,
               itemCount: lefteye.length,
               itemBuilder: (context,i){
-                return _buildListItem(lefteye[i]);
+                return GestureDetector(
+                  onTapDown: (_)=>{
+                    addToMap(lefteye[i],'lefteye')
+                  },
+                  child: _buildListItem(lefteye[i])
+                  );
               }
             
             ),
@@ -186,7 +195,12 @@ class _MyHomePageState extends State<MyHomePage> {
               scrollDirection: Axis.horizontal,
               itemCount: rightbrow.length,
               itemBuilder: (context,i){
-                return _buildListItem(rightbrow[i]);
+                return GestureDetector(
+                  onTapDown: (_)=>{
+                    addToMap(rightbrow[i],'righteyebrow')
+                  },
+                  child: _buildListItem(rightbrow[i])
+                  );
               }
             
             ),
@@ -215,7 +229,12 @@ class _MyHomePageState extends State<MyHomePage> {
               scrollDirection: Axis.horizontal,
               itemCount: righteye.length,
               itemBuilder: (context,i){
-                return _buildListItem(righteye[i]);
+                return GestureDetector(
+                  onTapDown: (_)=>{
+                    addToMap(righteye[i],'righteye')
+                  },
+                  child: _buildListItem(righteye[i])
+                  );
               }
             
             ),
@@ -244,18 +263,32 @@ class _MyHomePageState extends State<MyHomePage> {
               scrollDirection: Axis.horizontal,
               itemCount: mouth.length,
               itemBuilder: (context,i){
-                return _buildListItem(mouth[i]);
+                return GestureDetector(
+                  onTapDown: (_)=>{
+                    addToMap(mouth[i],'mouth')
+                  },
+                  child: _buildListItem(mouth[i])
+                  );
               }
             
             ),
           ),
         ],
       ),
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: Colors.green[400],
+        onPressed: (){
+          print(toSend.keys);
+        },
+        child: Icon(Icons.check,color: Colors.white,),
+        ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
     );
   }
 
   Widget _buildListItem(String imgPath) {
     return InkWell(
+      focusColor: Colors.black,
         onTap: () {},
         child: Padding(
             padding: EdgeInsets.only(left: 20.0, top: 10.0, bottom: 10.0),
