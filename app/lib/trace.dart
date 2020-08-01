@@ -13,7 +13,7 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   List<dynamic> righteye,lefteye,lefteyebrow,rightbrow,mouth,nose,face;
   Map object;
-  Map<String,String> to_send;
+  Map<String,String> toSend = new Map();
   bool isLoading = true;
   void getData(http.Response res) {
     if(res.statusCode != 200){
@@ -34,6 +34,12 @@ class _MyHomePageState extends State<MyHomePage> {
       setState(() {
         isLoading = false;
       });
+  }
+
+  void addToMap(String val,String key)
+  { 
+      toSend[key] = val;
+      return;
   }
 
   @override
@@ -89,11 +95,10 @@ class _MyHomePageState extends State<MyHomePage> {
               itemCount: nose.length,
               itemBuilder: (context,i){
                 return GestureDetector(
-                  child: Focus(
-                    autofocus: true,
-                    child:_buildListItem(nose[i])),
-                  onTap: () => {
-                    to_send['nose'] = nose[i]
+                  child: _buildListItem(nose[i]),
+                  onTapDown : (_)=>{
+                    addToMap(nose[i],'nose'),
+                    print(toSend)
                   },
                 );
               },
