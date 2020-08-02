@@ -13,10 +13,11 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  List<ModalRadio> righteye,lefteye,lefteyebrow,rightbrow,mouth,nose,face;
+  List<ModalRadio> righteye,lefteye,lefteyebrow,rightbrow,mouth,nose,face,outline;
   Map object;
   Map<String,String> toSend = new Map();
   bool isLoading = true;
+  bool isSwitch = false;
   List<ModalRadio> getModalList(List<dynamic> ref)
   {
     List<ModalRadio> lst = new List<ModalRadio>();
@@ -41,6 +42,7 @@ class _MyHomePageState extends State<MyHomePage> {
       mouth = getModalList(object['mouth']);
       lefteye = getModalList(object['lefteye']);
       nose = getModalList(object['nose']);
+      outline = getModalList(object['outline']);
       setState(() {
         isLoading = false;
       });
@@ -306,6 +308,43 @@ class _MyHomePageState extends State<MyHomePage> {
                     })
                   },
                   child: _buildListItem(mouth[i])
+                  );
+              }
+            
+            ),
+          ),
+          SizedBox(height: 10.0),
+          Padding(
+            padding: EdgeInsets.only(left: 25.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                SizedBox(height: 20.0),
+                Text('Face outline',
+                    style: TextStyle(
+                        fontFamily: 'Montserrat',
+                        fontWeight: FontWeight.w600,
+                        fontSize: 17.0))
+              ],
+            ),
+          ),
+          //Lips
+          SizedBox(height: 7.0),
+          Container(
+            height: 250.0,
+            child: ListView.builder(
+              scrollDirection: Axis.horizontal,
+              itemCount: outline.length,
+              itemBuilder: (context,i){
+                return GestureDetector(
+                  onTapDown: (_)=>{
+                    setState(()=>{
+                        addToMap(outline[i].img,'outline'),
+                        outline.forEach((element) { element.isSelected = false;}),
+                        outline[i].isSelected = true,
+                    })
+                  },
+                  child: _buildListItem(outline[i])
                   );
               }
             

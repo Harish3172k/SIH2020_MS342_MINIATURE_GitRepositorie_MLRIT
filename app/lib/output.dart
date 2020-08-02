@@ -8,11 +8,6 @@ class Output extends StatelessWidget {
   Output({Key key, @required this.img}) : super(key: key);
 
   @override
-  void initState() {
-    print(img.keys);
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
