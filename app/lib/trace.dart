@@ -1,9 +1,11 @@
 import 'dart:convert';
 import 'package:e_spy/auth.dart';
+import 'package:e_spy/output.dart';
 import 'package:flushbar/flushbar.dart';
 import 'package:progress_indicators/progress_indicators.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import './modals/customradio.dart';
 
 class MyHomePage extends StatefulWidget {
   @override
@@ -11,10 +13,18 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  List<dynamic> righteye,lefteye,lefteyebrow,rightbrow,mouth,nose,face;
+  List<ModalRadio> righteye,lefteye,lefteyebrow,rightbrow,mouth,nose,face;
   Map object;
   Map<String,String> toSend = new Map();
   bool isLoading = true;
+  List<ModalRadio> getModalList(List<dynamic> ref)
+  {
+    List<ModalRadio> lst = new List<ModalRadio>();
+    ref.forEach((element)=> { 
+        lst.add(new ModalRadio(false,element))
+    });
+    return lst;
+  }
   void getData(http.Response res) {
     if(res.statusCode != 200){
         Flushbar(messageText: Text('Session expired',style: TextStyle(color:Colors.white),),duration: Duration(seconds:5),)..show(context);
@@ -25,12 +35,12 @@ class _MyHomePageState extends State<MyHomePage> {
     }
       object = json.decode(res.body);
       print(object.keys);
-      righteye = object['righteye'];
-      rightbrow = object['righteyebrow'];
-      lefteyebrow = object['lefteyebrow'];
-      mouth = object['mouth'];
-      lefteye = object['lefteye'];
-      nose = object['nose'];
+      righteye = getModalList(object['righteye']);
+      rightbrow = getModalList(object['righteyebrow']);
+      lefteyebrow = getModalList(object['lefteyebrow']);
+      mouth = getModalList(object['mouth']);
+      lefteye = getModalList(object['lefteye']);
+      nose = getModalList(object['nose']);
       setState(() {
         isLoading = false;
       });
@@ -96,8 +106,12 @@ class _MyHomePageState extends State<MyHomePage> {
               itemBuilder: (context,i){
                 return GestureDetector(
                   child: _buildListItem(nose[i]),
-                  onTapDown : (_)=>{
-                    addToMap(nose[i],'nose'),
+                  onTapDown: (_)=>{
+                    setState(()=>{
+                      addToMap(nose[i].img,'nose'),
+                      nose.forEach((element) { element.isSelected = false;}),
+                      nose[i].isSelected = true
+                    })
                   },
                 );
               },
@@ -128,8 +142,15 @@ class _MyHomePageState extends State<MyHomePage> {
               itemCount: lefteyebrow.length,
               itemBuilder: (context,i){
                 return GestureDetector(
-                  onTapDown: (_)=>{
-                    addToMap(lefteyebrow[i],'lefteyebrow')
+                  onTapDown: (_)=>{ 
+                    (lefteyebrow[i].isSelected)?setState(()=>{
+                      lefteyebrow[i].isSelected = false,
+                      toSend.remove('lefteyebrow')
+                    }):setState(()=>{
+                      addToMap(lefteyebrow[i].img,'lefteyebrow'),
+                      lefteyebrow.forEach((element) { element.isSelected = false;}),
+                      lefteyebrow[i].isSelected = true
+                    })
                   },
                   child: _buildListItem(lefteyebrow[i])
                   );
@@ -163,7 +184,11 @@ class _MyHomePageState extends State<MyHomePage> {
               itemBuilder: (context,i){
                 return GestureDetector(
                   onTapDown: (_)=>{
-                    addToMap(lefteye[i],'lefteye')
+                    setState(()=>{
+                    addToMap(lefteye[i].img,'lefteye'),
+                    lefteye.forEach((element) { element.isSelected = false;}),
+                    lefteye[i].isSelected = true
+                    })
                   },
                   child: _buildListItem(lefteye[i])
                   );
@@ -197,7 +222,11 @@ class _MyHomePageState extends State<MyHomePage> {
               itemBuilder: (context,i){
                 return GestureDetector(
                   onTapDown: (_)=>{
-                    addToMap(rightbrow[i],'righteyebrow')
+                    setState(()=>{
+                        addToMap(rightbrow[i].img,'righteyebrow'),
+                        rightbrow.forEach((element) { element.isSelected = false;}),
+                        rightbrow[i].isSelected = true
+                    })
                   },
                   child: _buildListItem(rightbrow[i])
                   );
@@ -231,7 +260,12 @@ class _MyHomePageState extends State<MyHomePage> {
               itemBuilder: (context,i){
                 return GestureDetector(
                   onTapDown: (_)=>{
-                    addToMap(righteye[i],'righteye')
+                    setState(()=>{
+                        addToMap(righteye[i].img,'righteye'),
+                        righteye.forEach((element) { element.isSelected = false;}),
+                        righteye[i].isSelected = true,
+
+                    })
                   },
                   child: _buildListItem(righteye[i])
                   );
@@ -265,7 +299,11 @@ class _MyHomePageState extends State<MyHomePage> {
               itemBuilder: (context,i){
                 return GestureDetector(
                   onTapDown: (_)=>{
-                    addToMap(mouth[i],'mouth')
+                    setState(()=>{
+                        addToMap(mouth[i].img,'mouth'),
+                        mouth.forEach((element) { element.isSelected = false;}),
+                        mouth[i].isSelected = true,
+                    })
                   },
                   child: _buildListItem(mouth[i])
                   );
@@ -277,8 +315,15 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
       floatingActionButton: FloatingActionButton(
         backgroundColor: Colors.green[400],
-        onPressed: (){
-          print(toSend.keys);
+        onPressed: ()=>{
+          http.post('https://sih-api07.herokuapp.com/selected-features',headers:{'Content-Type':'application/json'},body: json.encode(toSend))
+          .then((res) =>{
+            print(res.headers),
+            print(res.statusCode),
+            print(res.body),
+            Navigator.push(context, MaterialPageRoute(builder: (BuildContext context)=>Output(img: json.decode(res.body))))
+          })
+          .catchError((err)=>print(err))
         },
         child: Icon(Icons.check,color: Colors.white,),
         ),
@@ -286,9 +331,8 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
-  Widget _buildListItem(String imgPath) {
+  Widget _buildListItem(ModalRadio imgPath) {
     return InkWell(
-      focusColor: Colors.black,
         onTap: () {},
         child: Padding(
             padding: EdgeInsets.only(left: 20.0, top: 10.0, bottom: 10.0),
@@ -297,6 +341,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 width: 150.0,
                 decoration: BoxDecoration(
                     color: Colors.white,
+                    border: Border.all(color: imgPath.isSelected?Colors.blue:Colors.white,width: 2),
                     borderRadius: BorderRadius.circular(20.0),
                     boxShadow: [
                       BoxShadow(
@@ -322,7 +367,7 @@ class _MyHomePageState extends State<MyHomePage> {
                           height: 200.0,
                           decoration: BoxDecoration(
                               image: DecorationImage(
-                                  image: MemoryImage(base64Decode(imgPath)),
+                                  image: MemoryImage(base64Decode(imgPath.img)),
                                   fit: BoxFit.contain),
                               borderRadius: BorderRadius.only(
                                   topLeft: Radius.circular(15.0),
