@@ -3,12 +3,16 @@ import 'package:photo_view/photo_view.dart';
 
 class Sample extends StatefulWidget
 {
+  Map<String,String> obj;
+  Sample(this.obj);
+  @override
   _SampleState createState() => _SampleState();
 }
 
 class _SampleState extends State<Sample>
 {
   Offset lefteye,righteye,rightbrow,leftbrow,nose,mouth,face;
+  Map<String,String> supObj;
   @override
   void initState()
   {
@@ -20,6 +24,7 @@ class _SampleState extends State<Sample>
     nose = Offset(300, 170);
     mouth = Offset(350, 165);
     face = Offset(50, 150);
+    supObj = widget.obj;
   }
   @override
   Widget build(BuildContext context) {

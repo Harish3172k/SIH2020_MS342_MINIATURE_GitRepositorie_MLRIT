@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:e_spy/auth.dart';
 import 'package:e_spy/modals/EvalModal.dart';
 import 'package:e_spy/output.dart';
+import 'package:e_spy/samp.dart';
 import 'package:flushbar/flushbar.dart';
 import 'package:progress_indicators/progress_indicators.dart';
 import 'package:flutter/material.dart';
@@ -384,21 +385,7 @@ class _MyHomePageState extends State<MyHomePage> {
             floatingActionButton: FloatingActionButton(
               backgroundColor: Colors.green[400],
               onPressed: () => {
-                http
-                    .post('https://sih-api07.herokuapp.com/selected-features',
-                        headers: {'Content-Type': 'application/json'},
-                        body: json.encode(toSend))
-                    .then((res) => {
-                          print(res.headers),
-                          print(res.statusCode),
-                          print(res.body),
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (BuildContext context) =>
-                                      Output(img: json.decode(res.body))))
-                        })
-                    .catchError((err) => print(err))
+                Navigator.push(context, MaterialPageRoute(builder: (BuildContext context)=>Sample(toSend)))
               },
               child: Icon(
                 Icons.check,
@@ -499,30 +486,67 @@ class _MyHomePageState extends State<MyHomePage> {
                 SizedBox(height: 7,),
                 Container(
                   height: 250,
-                  child: _buildListItemEval(list[0]),
+                  child: GestureDetector(
+                    onTapDown: (_)=>{
+                      setState(()=>{
+                        list.forEach((element) {element.isSelected = false; }),
+                        list[0].isSelected = true
+                      })
+                    },
+                    child: _buildListItemEval(list[0])),
                 ),
                 SizedBox(height: 7,),
                 Container(
                   height: 250,
-                  child: _buildListItemEval(list[1]),
+                  child: GestureDetector(
+                    onTapDown: (_)=>{
+                      setState(()=>{
+                        list.forEach((element) {element.isSelected = false; }),
+                        list[1].isSelected = true
+                      })
+                    },
+                    child: _buildListItemEval(list[1])),
                 ),
                 SizedBox(height: 7,),
                 Container(
                   height: 250,
-                  child: _buildListItemEval(list[2]),
+                  child: GestureDetector(
+                    onTapDown: (_)=>{
+                      setState(()=>{
+                        list.forEach((element) {element.isSelected = false; }),
+                        list[2].isSelected = true
+                      })
+                    },
+                    child: _buildListItemEval(list[2])),
                 ),
                 SizedBox(height: 7,),
                 Container(
                   height: 250,
-                  child: _buildListItemEval(list[3]),
+                  child: GestureDetector(
+                    onTapDown: (_)=>{
+                      setState(()=>{
+                        list.forEach((element) {element.isSelected = false; }),
+                        list[3].isSelected = true
+                      })
+                    },
+                    child: _buildListItemEval(list[3])),
                 ),
                 SizedBox(height: 7,),
                 Container(
                   height: 250,
-                  child: _buildListItemEval(list[4]),
+                  child: GestureDetector(
+                    onTapDown: (_)=>{
+                      setState(()=>{
+                        list.forEach((element) {element.isSelected = false; }),
+                        list[4].isSelected = true
+                      })
+                    },
+                    child: _buildListItemEval(list[4])),
                 ),
           ],
         ),
+        floatingActionButton: FloatingActionButton(onPressed: ()=>{},child: Icon(Icons.check),backgroundColor: Colors.blue,),
+        floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
     );
   }
   Widget _buildListItemEval(EvalModal ref) {
