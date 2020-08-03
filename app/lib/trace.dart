@@ -496,7 +496,31 @@ class _MyHomePageState extends State<MyHomePage> {
                     ],
                   ),
                 ),
-                
+                SizedBox(height: 7,),
+                Container(
+                  height: 250,
+                  child: _buildListItemEval(list[0]),
+                ),
+                SizedBox(height: 7,),
+                Container(
+                  height: 250,
+                  child: _buildListItemEval(list[1]),
+                ),
+                SizedBox(height: 7,),
+                Container(
+                  height: 250,
+                  child: _buildListItemEval(list[2]),
+                ),
+                SizedBox(height: 7,),
+                Container(
+                  height: 250,
+                  child: _buildListItemEval(list[3]),
+                ),
+                SizedBox(height: 7,),
+                Container(
+                  height: 250,
+                  child: _buildListItemEval(list[4]),
+                ),
           ],
         ),
     );
