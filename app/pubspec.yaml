@@ -64,6 +64,11 @@ flutter:
    - assets/nose.jpg
    - assets/lips.jpg
    - assets/face.jpg
+   - assets/One.jpeg
+   - assets/Two.jpeg
+   - assets/Three.jpeg
+   - assets/Four.jpeg
+   - assets/Five.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
